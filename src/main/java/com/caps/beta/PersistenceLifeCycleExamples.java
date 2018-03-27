@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import com.caps.beta.dto.Movie;
 import com.caps.beta.utils.HibernateUtils;
 
 import associations.many_to_many.Students_Bidirectional;
@@ -21,18 +22,33 @@ import associations.one_to_many.PencilBox_UniDirectional;
 import associations.one_to_one.User_OneToOneBidirectional;
 import associations.one_to_one.VoterCard;
 
-public class TestHibenate {
+public class PersistenceLifeCycleExamples {
 	public static void main(String[] args) {
 		
 		EntityManagerFactory emf = HibernateUtils.getEMF();
 		EntityManager em = emf.createEntityManager();
 		
+//		Movie m = new Movie();
+//		m.setMovieId(4);
+//		m.setName("Delhi belly");
+//		m.setRating(9.5);
+//		m.setSummery("Bhag Bhag DK Bose");
+		
 		em.getTransaction().begin();
 		
-//		em.persist(Entity);
+		Movie m = em.find(Movie.class, 4);
+		System.out.println("After Retrival: "+em.contains(m));
+		
+		em.detach(m);
+		System.out.println("After Detached: "+em.contains(m));
+		m = em.merge(m);
+		
+		System.out.println("After Merge: "+em.contains(m));
 		
 		em.getTransaction().commit();
 		em.close();
+		
+		
 	}
 }
 
